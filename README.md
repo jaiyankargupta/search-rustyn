@@ -1,205 +1,155 @@
-# SearchRustyn - Repository Search Application
+# SearchRustyn - Next.js Version
 
-A modern, responsive React application for searching GitHub repositories, viewing user profiles, generating READMEs, and comparing users with an attractive UI and multiple search modes.
+A modern Next.js application for searching GitHub repositories by ideas, repository names, owners, and GitHub user profiles.
 
 ## Features
 
-- 🎨 **Beautiful UI**: Modern gradient design with glass-morphism effects
-- 🔍 **Multiple Search Modes**: 
-  - Search by Ideas
-  - Search by Repository Name  
-  - Search by Owner Name
-  - GitHub User Profile Search
-- 📱 **Responsive Design**: Works perfectly on desktop, tablet, and mobile
-- ⚡ **Real-time Search**: Instant search results with loading states
-- 🎯 **Smart Endpoints**: Uses the what-to-build API for repository discovery
-- 👨‍💻 **User Profiles**: Detailed GitHub user statistics and information
-- 📝 **README Generator**: AI-powered README generation for repositories
-- 🥊 **User Battles**: Compare two GitHub users side by side
+- 🔍 **Multiple Search Modes**: Search by ideas, repository names, owners, or GitHub usernames
+- 📝 **README Generator**: Generate professional README files for your projects
+- ⚔️ **User Battle**: Compare GitHub users and their contributions
+- 🎨 **Modern UI**: Beautiful, responsive design with Tailwind CSS
+- 🚀 **Next.js 14**: Built with the latest Next.js features
 
-## Search Modes
+## Tech Stack
 
-### 1. Search by Ideas
-- Endpoint: `https://what-to-build.niladri.tech/api/search-repos?query={query}&page=1&mode=idea&per_page=10`
-- Perfect for finding repositories based on project ideas and concepts
+- **Frontend**: Next.js 14, React 18, Tailwind CSS
+- **Icons**: Lucide React
+- **Styling**: Tailwind CSS with custom glass effects
+- **API**: Next.js API routes with external proxy support
 
-### 2. Search by Repository Name
-- Endpoint: `https://what-to-build.niladri.tech/api/search-repos?query={query}&page=1&mode=repo&per_page=10`
-- Search for repositories by their exact or partial names
+## Getting Started
 
-### 3. Search by Owner Name
-- Endpoint: `https://what-to-build.niladri.tech/api/search-repos?query={query}&page=1&per_page=10&mode=find`
-- Discover repositories owned by specific users or organizations
+### Prerequisites
 
-### 4. GitHub User Profile
-- Endpoint: `https://what-to-build.niladri.tech/api/github-user?username={username}`
-- Get detailed user information, statistics, and top repositories
+- Node.js 18+ 
+- npm or yarn
 
-## Additional Features
+### Installation
 
-### README Generator
-- **Endpoint**: `https://what-to-build.niladri.tech/api/generate-readme`
-- **Method**: POST
-- **Body**: `{"repo": "https://github.com/username/repository"}`
-- Generate professional README files using AI
+1. Clone the repository:
+```bash
+git clone https://github.com/jaiyankargupta/searchRustyn.git
+cd searchRustyn
+```
 
-### User Battle
-- **Endpoint**: `https://what-to-build.niladri.tech/api/generate-roast`
-- **Method**: POST
-- **Body**: `{"user1": "username1", "user2": "username2"}`
-- Compare two GitHub users and see who comes out on top
+2. Install dependencies:
+```bash
+npm install
+```
 
-## Installation
+3. Create environment variables (optional):
+```bash
+cp .env.example .env.local
+# Edit .env.local with your configuration
+```
 
-1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd searchRustyn
-   ```
+### Development
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+Run the development server:
+```bash
+npm run dev
+```
 
-3. **Start the development environment**
-   ```bash
-   npm run dev
-   ```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-   This will start both:
-   - **Proxy Server**: Running on `http://localhost:3001` (handles CORS)
-   - **React App**: Running on `http://localhost:3000`
+### Full Development Mode (with Express server)
 
-4. **Open your browser**
-   Navigate to `http://localhost:3000`
+If you want to run both Next.js and the Express proxy server:
+```bash
+npm run dev:full
+```
 
-## Alternative: Run Servers Separately
+This will start:
+- Next.js dev server on port 3000
+- Express proxy server on port 3001
 
-If you prefer to run the servers separately:
+### Production Build
 
-1. **Start the proxy server** (in one terminal):
-   ```bash
-   npm run server
-   ```
-
-2. **Start the React app** (in another terminal):
-   ```bash
-   npm start
-   ```
-
-## CORS Solution
-
-This application includes a **proxy server** to handle CORS issues. The proxy server:
-
-- Runs on port 3001
-- Forwards API requests to `https://what-to-build.niladri.tech`
-- Handles CORS headers automatically
-- Provides detailed logging for debugging
-
-## Build for Production
-
+Build the application:
 ```bash
 npm run build
 ```
 
-## Technologies Used
+Static files are automatically generated during the build process.
 
-- **React 18** - Modern React with hooks
-- **Tailwind CSS** - Utility-first CSS framework
-- **Lucide React** - Beautiful icons
-- **Express.js** - Proxy server for CORS handling
-- **Glass-morphism** - Modern UI design trend
-- **Responsive Design** - Mobile-first approach
+Start production server:
+```bash
+npm run start:prod
+```
 
 ## Project Structure
 
 ```
 searchRustyn/
-├── server.js                    # Express proxy server
+├── pages/                 # Next.js pages and API routes
+│   ├── api/              # API endpoints
+│   │   ├── search-repos.js
+│   │   ├── github-user.js
+│   │   └── health.js
+│   ├── _app.js           # App wrapper
+│   ├── _document.js      # Document wrapper
+│   └── index.js          # Home page
 ├── src/
-│   ├── components/
-│   │   ├── SearchModeToggle.js    # Search mode buttons
-│   │   ├── SearchBar.js           # Search input component
-│   │   ├── RepositoryCard.js      # Repository display card
-│   │   ├── UserProfileCard.js     # GitHub user profile display
-│   │   ├── ReadmeGenerator.js     # README generation component
-│   │   ├── UserBattle.js          # User comparison component
-│   │   └── LoadingSpinner.js      # Loading animation
-│   ├── App.js                     # Main application component
-│   ├── index.js                   # Application entry point
-│   └── index.css                  # Global styles and Tailwind imports
-├── package.json                   # Dependencies and scripts
-└── README.md                      # This file
+│   ├── components/       # React components
+│   └── index.css         # Global styles
+├── server.js             # Express proxy server
+├── next.config.js        # Next.js configuration
+└── package.json
 ```
 
-## API Integration
+## API Routes
 
-The application integrates with the [what-to-build API](https://what-to-build.niladri.tech/) through a local proxy server to avoid CORS issues. The API provides:
+### `/api/search-repos`
+Search for repositories by ideas, names, or owners.
 
-- Repository metadata and search
-- User profile information and statistics
-- README generation using AI
-- User comparison and battle features
+**Query Parameters:**
+- `query`: Search term (required)
+- `mode`: Search mode (`idea`, `repo`, `owner`)
+- `page`: Page number (default: 1)
+- `per_page`: Results per page (default: 10)
 
-## Usage Examples
+### `/api/github-user`
+Get GitHub user profile information.
 
-### Search for Repositories
-1. Select a search mode (Ideas, Repo Name, Owner, or User Profile)
-2. Enter your search query
-3. View results in beautiful cards
+**Query Parameters:**
+- `username`: GitHub username (required)
 
-### Generate README
-1. Go to the "README Generator" tab
-2. Enter a GitHub repository URL
-3. Click "Generate" to create a professional README
-4. Copy or download the generated content
+### `/api/health`
+Health check endpoint.
 
-### User Battle
-1. Go to the "User Battle" tab
-2. Enter two GitHub usernames
-3. Click "Start Battle!" to compare their stats
-4. See who has more stars, forks, and contributions
+## Deployment
 
-## Troubleshooting
+### GitHub Pages
 
-### CORS Issues
-If you encounter CORS errors:
-1. Make sure the proxy server is running on port 3001
-2. Check that the React app is using `http://localhost:3001/api/*` endpoints
-3. Verify both servers are running simultaneously
-
-### Port Conflicts
-If port 3000 or 3001 is already in use:
-1. Kill existing processes: `pkill -f "react-scripts start"` or `pkill -f "node server.js"`
-2. Or change ports in the respective configuration files
-
-## Customization
-
-### Colors
-Modify the color scheme in `tailwind.config.js`:
-```javascript
-colors: {
-  primary: {
-    50: '#eff6ff',
-    500: '#3b82f6',
-    600: '#2563eb',
-  }
-}
+1. Build for static export:
+```bash
+npm run build:export
 ```
 
-### Search Results
-Adjust the number of results per page by modifying the `per_page` parameter in the API calls.
+2. Deploy:
+```bash
+npm run deploy
+```
 
-### Styling
-Customize the glass-morphism effects and animations in `src/index.css`.
+### Vercel (Recommended)
 
-## Browser Support
+1. Install Vercel CLI:
+```bash
+npm i -g vercel
+```
 
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
+2. Deploy:
+```bash
+vercel
+```
+
+### Other Platforms
+
+The app can be deployed to any platform that supports Next.js:
+- Netlify
+- AWS Amplify
+- Railway
+- Render
 
 ## Contributing
 
@@ -211,12 +161,16 @@ Customize the glass-morphism effects and animations in `src/index.css`.
 
 ## License
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is licensed under the MIT License.
 
-## Support
+## Migration from React
 
-If you encounter any issues or have questions, please open an issue in the repository.
+This project was migrated from Create React App to Next.js. Key changes:
 
----
+- Replaced `react-scripts` with `next`
+- Converted `src/App.js` to `pages/index.js`
+- Added Next.js API routes to replace Express server functionality
+- Updated build and deployment scripts
+- Added Next.js configuration files
 
-Built with ❤️ using React, Express, and Tailwind CSS
+The Express server (`server.js`) is still included for proxy functionality and can be used alongside Next.js if needed.

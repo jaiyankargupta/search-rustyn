@@ -45,12 +45,12 @@ app.get('/health', (req, res) => {
 
 // Serve static files in production
 if (NODE_ENV === 'production') {
-  // Serve the React app build files
-  app.use(express.static(path.join(__dirname, 'build')));
+  // Serve the Next.js app build files
+  app.use(express.static(path.join(__dirname, 'out')));
 
-  // Handle React routing, return all requests to React app
+  // Handle Next.js routing, return all requests to Next.js app
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+    res.sendFile(path.join(__dirname, 'out', 'index.html'));
   });
 }
 
@@ -58,7 +58,7 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`🌍 Environment: ${NODE_ENV}`);
   if (NODE_ENV === 'production') {
-    console.log(`📱 Serving React app from build folder`);
+    console.log(`📱 Serving Next.js app from out folder`);
   } else {
     console.log(`📡 Proxying /api/* requests to https://what-to-build.niladri.tech`);
   }
