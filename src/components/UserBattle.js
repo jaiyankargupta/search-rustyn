@@ -22,7 +22,7 @@ const UserBattle = () => {
     setProfileData(null);
 
     try {
-      const response = await fetch(`http://localhost:3001/api/github-user?username=${profileUsername}`);
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001'}/api/github-user?username=${profileUsername}`);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -46,7 +46,7 @@ const UserBattle = () => {
     setBattleResult(null);
 
     try {
-      const response = await fetch('http://localhost:3001/api/generate-roast', {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001'}/api/generate-roast`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

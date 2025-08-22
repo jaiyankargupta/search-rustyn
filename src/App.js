@@ -26,15 +26,17 @@ function App() {
   ];
 
   const getApiUrl = (searchQuery, mode) => {
+    const baseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
+    
     if (mode === 'user') {
-      return `http://localhost:3001/api/github-user?username=${searchQuery}`;
+      return `${baseUrl}/api/github-user?username=${searchQuery}`;
     }
     
-    const baseUrl = 'http://localhost:3001/api/search-repos';
+    const apiUrl = `${baseUrl}/api/search-repos`;
     const params = new URLSearchParams({
       query: searchQuery,
       page: 1,
-      per_page: 15
+      per_page: 10
     });
 
     if (mode === 'idea') {
@@ -45,7 +47,7 @@ function App() {
       params.append('mode', 'find');
     }
 
-    return `${baseUrl}?${params.toString()}`;
+    return `${apiUrl}?${params.toString()}`;
   };
 
   const searchRepositories = async (searchQuery) => {

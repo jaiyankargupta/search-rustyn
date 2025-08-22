@@ -16,7 +16,7 @@ const ReadmeGenerator = () => {
     setReadmeContent('');
 
     try {
-      const response = await fetch('http://localhost:3001/api/generate-readme', {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001'}/api/generate-readme`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
