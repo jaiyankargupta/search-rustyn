@@ -110,8 +110,8 @@ export default function Home() {
     
     if (error) {
       return (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-800">{error}</p>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-6 shadow-lg">
+          <p className="text-red-800 font-medium">{error}</p>
         </div>
       );
     }
@@ -132,14 +132,14 @@ export default function Home() {
 
     if (query) {
       return (
-        <div className="text-center py-12">
-          <div className="text-gray-400 mb-4">
-            <Search className="w-16 h-16 mx-auto" />
+        <div className="text-center py-16">
+          <div className="text-gray-400 mb-6">
+            <Search className="w-20 h-20 mx-auto opacity-50" />
           </div>
-          <h3 className="text-lg font-medium text-gray-300 mb-2">
+          <h3 className="text-xl font-semibold text-gray-300 mb-3">
             No results found
           </h3>
-          <p className="text-gray-400">
+          <p className="text-gray-400 max-w-md mx-auto">
             Try adjusting your search query or search mode
           </p>
         </div>
@@ -148,14 +148,14 @@ export default function Home() {
 
     if (showAllRepos) {
       return (
-        <div className="text-center py-12">
-          <div className="text-gray-400 mb-4">
-            <Github className="w-16 h-16 mx-auto" />
+        <div className="text-center py-16">
+          <div className="text-gray-400 mb-6">
+            <Github className="w-20 h-20 mx-auto opacity-50" />
           </div>
-          <h3 className="text-lg font-medium text-gray-300 mb-2">
+          <h3 className="text-xl font-semibold text-gray-300 mb-3">
             Start searching
           </h3>
-          <p className="text-gray-400">
+          <p className="text-gray-400 max-w-md mx-auto">
             Enter a query to discover repositories or users
           </p>
         </div>
@@ -174,30 +174,54 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       
-      <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-800">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10"></div>
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 25% 25%, rgba(147, 51, 234, 0.1) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(59, 130, 246, 0.1) 0%, transparent 50%)`
+          }}></div>
+        </div>
+        
         {/* Header */}
-        <header className="glass-effect border-b border-white/20">
+        <header className="relative z-10 backdrop-blur-md bg-white/5 border-b border-white/10 shadow-2xl">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                  <Github className="w-6 h-6 text-white" />
+            <div className="flex items-center justify-between h-20">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Github className="w-7 h-7 text-white" />
                 </div>
-                <h1 className="text-2xl font-bold text-white">SearchRustyn</h1>
+                <div>
+                  <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
+                    SearchRustyn
+                  </h1>
+                  <p className="text-purple-200 text-sm font-medium">Repository Discovery Platform</p>
+                </div>
               </div>
-              <div className="text-white/80 text-sm">
-                Discover amazing repositories & users
+              <div className="hidden md:block">
+                <div className="flex items-center space-x-6 text-purple-200">
+                  <a
+                    href="https://github.com/jaiyankargupta"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-2 text-sm font-medium hover:underline"
+                  >
+                    <Github className="w-5 h-5" />
+                    <span>jaiyankargupta</span>
+                  </a>
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                </div>
               </div>
             </div>
           </div>
         </header>
 
         {/* Main Content */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Feature Tabs */}
-          <div className="mb-8">
+          <div className="mb-12">
             <div className="flex justify-center">
-              <div className="inline-flex rounded-lg bg-white/10 p-1 backdrop-blur-sm border border-white/20">
+              <div className="inline-flex rounded-2xl bg-white/10 p-2 backdrop-blur-sm border border-white/20 shadow-xl">
                 {[
                   { id: 'search', label: 'Search', icon: Search },
                   { id: 'readme', label: 'README Generator', icon: FileText },
@@ -206,13 +230,13 @@ export default function Home() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`px-6 py-3 rounded-md text-sm font-medium transition-all duration-200 flex items-center space-x-2 ${
+                    className={`px-8 py-4 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center space-x-3 ${
                       activeTab === tab.id
-                        ? 'bg-white text-gray-900 shadow-lg transform scale-105'
-                        : 'text-white/70 hover:text-white hover:bg-white/5'
+                        ? 'bg-gradient-to-r from-purple-500 to-blue-600 text-white shadow-2xl transform scale-105'
+                        : 'text-white/70 hover:text-white hover:bg-white/10'
                     }`}
                   >
-                    <tab.icon className="w-4 h-4" />
+                    <tab.icon className="w-5 h-5" />
                     <span>{tab.label}</span>
                   </button>
                 ))}
@@ -224,7 +248,7 @@ export default function Home() {
           {activeTab === 'search' && (
             <>
               {/* Search Mode Toggle - Only visible in Search tab */}
-              <div className="mb-8">
+              <div className="mb-12">
                 <SearchModeToggle
                   modes={searchModes}
                   activeMode={searchMode}
@@ -233,7 +257,7 @@ export default function Home() {
               </div>
 
               {/* Search Bar - Only visible in Search tab */}
-              <div className="mb-8">
+              <div className="mb-12">
                 <SearchBar
                   onSearch={handleSearch}
                   onFocus={handleSearchBarFocus}
@@ -245,7 +269,7 @@ export default function Home() {
               </div>
 
               {/* Search Results */}
-              <div className="space-y-6">
+              <div className="space-y-8">
                 {renderSearchResults()}
               </div>
             </>

@@ -15,11 +15,11 @@ const SearchBar = ({ onSearch, onFocus, onBlur, placeholder, value, onChange }) 
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-3xl mx-auto">
       <form onSubmit={handleSubmit} className="relative">
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <Search className="h-5 w-5 text-gray-400" />
+        <div className="relative group">
+          <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+            <Search className="h-6 w-6 text-gray-400 group-focus-within:text-purple-500 transition-colors duration-200" />
           </div>
           <input
             type="text"
@@ -28,11 +28,11 @@ const SearchBar = ({ onSearch, onFocus, onBlur, placeholder, value, onChange }) 
             onFocus={onFocus}
             onBlur={onBlur}
             placeholder={placeholder}
-            className="w-full pl-12 pr-4 py-4 bg-white/90 backdrop-blur-sm border-2 border-transparent rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-lg hover:shadow-xl"
+            className="w-full pl-16 pr-32 py-5 bg-white/95 backdrop-blur-md border-2 border-white/20 rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-300 shadow-2xl hover:shadow-3xl hover:scale-[1.02]"
           />
           <button
             type="submit"
-            className="absolute inset-y-0 right-0 px-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-r-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="absolute inset-y-0 right-0 px-8 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-r-2xl hover:from-purple-700 hover:to-blue-700 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-purple-500/20 shadow-lg hover:shadow-xl transform hover:scale-105"
           >
             Search
           </button>
