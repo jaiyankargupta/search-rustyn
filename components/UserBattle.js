@@ -22,7 +22,7 @@ const UserBattle = () => {
     setProfileData(null);
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001'}/api/github-user?username=${profileUsername}`);
+      const response = await fetch(`/api/github-user?username=${profileUsername}`);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -46,7 +46,7 @@ const UserBattle = () => {
     setBattleResult(null);
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001'}/api/generate-roast`, {
+      const response = await fetch(`/api/generate-roast`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,39 +98,39 @@ const UserBattle = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* GitHub Profile Section */}
-      <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 overflow-hidden">
-        <div className="p-6 border-b border-gray-100">
-          <div className="flex items-center space-x-3 mb-4">
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-              <User className="w-6 h-6 text-blue-600" />
+      <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/30 overflow-hidden">
+        <div className="p-4 sm:p-6 border-b border-gray-100">
+          <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+              <User className="w-4 h-4 sm:w-6 sm:h-6 text-blue-600" />
             </div>
-            <h2 className="text-xl font-bold text-gray-900">GitHub Profile Lookup</h2>
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900">GitHub Profile Lookup</h2>
           </div>
-          <p className="text-gray-600 mb-4">
+          <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">
             Search for a GitHub user to view their profile and statistics
           </p>
           
           {/* Profile Search Input */}
-          <div className="flex space-x-3">
+          <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
             <input
               type="text"
               value={profileUsername}
               onChange={(e) => setProfileUsername(e.target.value)}
               placeholder="Enter GitHub username"
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="flex-1 px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
             />
             <button
               onClick={searchProfile}
               disabled={profileLoading || !profileUsername.trim()}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 flex items-center space-x-2"
+              className="px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 flex items-center justify-center space-x-2 text-sm sm:text-base font-medium"
             >
               {profileLoading ? (
-                <Loader className="w-5 h-5 animate-spin" />
+                <Loader className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
               ) : (
                 <>
-                  <Search className="w-5 h-5" />
+                  <Search className="w-4 h-4 sm:w-5 sm:h-5" />
                   <span>Search</span>
                 </>
               )}
@@ -140,31 +140,31 @@ const UserBattle = () => {
 
         {/* Profile Error Display */}
         {profileError && (
-          <div className="px-6 py-4 bg-red-50 border-l-4 border-red-400">
-            <p className="text-red-800">{profileError}</p>
+          <div className="px-4 sm:px-6 py-4 bg-red-50 border-l-4 border-red-400">
+            <p className="text-red-800 text-sm sm:text-base">{profileError}</p>
           </div>
         )}
 
         {/* Profile Display */}
         {profileData && (
-          <div className="p-6">
-            <div className="flex items-start space-x-6">
+          <div className="p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
               {/* Avatar and Basic Info */}
               <div className="flex-shrink-0">
                 <img
                   src={profileData.user.avatar_url}
                   alt={profileData.user.login}
-                  className="w-24 h-24 rounded-full border-4 border-blue-100"
+                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-blue-100"
                 />
               </div>
               
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-3">
+              <div className="flex-1 text-center sm:text-left">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 space-y-2 sm:space-y-0">
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900">
+                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
                       {profileData.user.name || profileData.user.login}
                     </h3>
-                    <p className="text-gray-600 text-lg">@{profileData.user.login}</p>
+                    <p className="text-gray-600 text-base sm:text-lg">@{profileData.user.login}</p>
                   </div>
                   <a
                     href={profileData.user.html_url}
@@ -172,31 +172,31 @@ const UserBattle = () => {
                     rel="noopener noreferrer"
                     className="text-blue-600 hover:text-blue-800 transition-colors duration-200"
                   >
-                    <User className="w-6 h-6" />
+                    <User className="w-5 h-5 sm:w-6 sm:h-6" />
                   </a>
                 </div>
                 
                 {profileData.user.bio && (
-                  <p className="text-gray-700 mb-4">{profileData.user.bio}</p>
+                  <p className="text-gray-700 mb-4 text-sm sm:text-base">{profileData.user.bio}</p>
                 )}
                 
                 {/* Quick Stats */}
-                <div className="grid grid-cols-4 gap-4 mb-4">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4">
                   <div className="text-center">
-                    <div className="text-xl font-bold text-blue-600">{profileData.user.public_repos}</div>
-                    <div className="text-sm text-gray-600">Repos</div>
+                    <div className="text-lg sm:text-xl font-bold text-blue-600">{profileData.user.public_repos}</div>
+                    <div className="text-xs sm:text-sm text-gray-600">Repos</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-xl font-bold text-yellow-600">{formatNumber(profileData.stats.totalStars)}</div>
-                    <div className="text-sm text-gray-600">Stars</div>
+                    <div className="text-lg sm:text-xl font-bold text-yellow-600">{formatNumber(profileData.stats.totalStars)}</div>
+                    <div className="text-xs sm:text-sm text-gray-600">Stars</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-xl font-bold text-green-600">{formatNumber(profileData.stats.totalForks)}</div>
-                    <div className="text-sm text-gray-600">Forks</div>
+                    <div className="text-lg sm:text-xl font-bold text-green-600">{formatNumber(profileData.stats.totalForks)}</div>
+                    <div className="text-xs sm:text-sm text-gray-600">Forks</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-xl font-bold text-purple-600">{formatNumber(profileData.stats.contributions)}</div>
-                    <div className="text-sm text-gray-600">Contributions</div>
+                    <div className="text-lg sm:text-xl font-bold text-purple-600">{formatNumber(profileData.stats.contributions)}</div>
+                    <div className="text-xs sm:text-sm text-gray-600">Contributions</div>
                   </div>
                 </div>
                 
@@ -233,23 +233,23 @@ const UserBattle = () => {
       </div>
 
       {/* User Battle Section */}
-      <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 overflow-hidden">
+      <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/30 overflow-hidden">
         {/* Header */}
-        <div className="p-6 border-b border-gray-100">
-          <div className="flex items-center space-x-3 mb-4">
-            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-              <Users className="w-6 h-6 text-purple-600" />
+        <div className="p-4 sm:p-6 border-b border-gray-100">
+          <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+              <Users className="w-4 h-4 sm:w-6 sm:h-6 text-purple-600" />
             </div>
-            <h2 className="text-xl font-bold text-gray-900">User Battle</h2>
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900">User Battle</h2>
           </div>
-          <p className="text-gray-600 mb-4">
+          <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">
             Compare two GitHub users and see who comes out on top! 🥊
           </p>
           
           {/* Input Form */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                 User 1
               </label>
               <input
@@ -257,11 +257,11 @@ const UserBattle = () => {
                 value={user1}
                 onChange={(e) => setUser1(e.target.value)}
                 placeholder="username1"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm sm:text-base"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                 User 2
               </label>
               <input
@@ -269,7 +269,7 @@ const UserBattle = () => {
                 value={user2}
                 onChange={(e) => setUser2(e.target.value)}
                 placeholder="username2"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm sm:text-base"
               />
             </div>
           </div>
@@ -277,16 +277,16 @@ const UserBattle = () => {
           <button
             onClick={startBattle}
             disabled={loading || !user1.trim() || !user2.trim()}
-            className="w-full px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 flex items-center justify-center space-x-2"
+            className="w-full px-4 sm:px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 flex items-center justify-center space-x-2 text-sm sm:text-base font-medium"
           >
             {loading ? (
               <>
-                <Loader className="w-5 h-5 animate-spin" />
+                <Loader className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
                 <span>Generating Battle...</span>
               </>
             ) : (
               <>
-                <Zap className="w-5 h-5" />
+                <Zap className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span>Start Battle!</span>
               </>
             )}
@@ -295,27 +295,27 @@ const UserBattle = () => {
 
         {/* Error Display */}
         {error && (
-          <div className="px-6 py-4 bg-red-50 border-l-4 border-red-400">
-            <p className="text-red-800">{error}</p>
+          <div className="px-4 sm:px-6 py-4 bg-red-50 border-l-4 border-red-400">
+            <p className="text-red-800 text-sm sm:text-base">{error}</p>
           </div>
         )}
 
         {/* Battle Results */}
         {battleResult && (
-          <div className="p-6">
-            <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Battle Results</h3>
+          <div className="p-4 sm:p-6">
+            <div className="text-center mb-4 sm:mb-6">
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Battle Results</h3>
               {getWinner() && (
                 <div className="flex items-center justify-center space-x-2 text-yellow-600">
-                  <Trophy className="w-6 h-6" />
-                  <span className="text-lg font-semibold">
+                  <Trophy className="w-5 h-5 sm:w-6 sm:h-6" />
+                  <span className="text-base sm:text-lg font-semibold">
                     Winner: {getWinner().user.login} 🏆
                   </span>
                 </div>
               )}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               {/* User 1 */}
               <div className="bg-blue-50 rounded-lg p-4">
                 <div className="flex items-center space-x-3 mb-3">

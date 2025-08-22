@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Search, Github, FileText, Users } from 'lucide-react';
+import Link from 'next/link';
 import SearchModeToggle from '../components/SearchModeToggle';
 import SearchBar from '../components/SearchBar';
 import RepositoryCard from '../components/RepositoryCard';
 import UserProfileCard from '../components/UserProfileCard';
 import ReadmeGenerator from '../components/ReadmeGenerator';
 import UserBattle from '../components/UserBattle';
+import OpenSourceTab from '../components/OpenSourceTab';
 import LoadingSpinner from '../components/LoadingSpinner';
 import Head from 'next/head';
 
@@ -229,7 +231,8 @@ export default function Home() {
                 {[
                   { id: 'search', label: 'Search', icon: Search },
                   { id: 'readme', label: 'README Generator', icon: FileText },
-                  { id: 'battle', label: 'User Battle', icon: Users }
+                  { id: 'battle', label: 'User Battle', icon: Users },
+                  { id: 'opensource', label: 'Open Source', icon: Github }
                 ].map((tab) => (
                   <button
                     key={tab.id}
@@ -288,6 +291,12 @@ export default function Home() {
           {activeTab === 'battle' && (
             <div className="max-w-4xl mx-auto">
               <UserBattle />
+            </div>
+          )}
+
+          {activeTab === 'opensource' && (
+            <div className="max-w-6xl mx-auto">
+              <OpenSourceTab />
             </div>
           )}
         </main>
