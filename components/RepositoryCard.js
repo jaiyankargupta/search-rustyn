@@ -20,13 +20,13 @@ const RepositoryCard = ({ repository }) => {
   return (
     <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2 border border-white/30 overflow-hidden group">
       {/* Header */}
-      <div className="p-6 border-b border-gray-100/50">
+      <div className="p-4 sm:p-6 border-b border-gray-100/50">
         <div className="flex items-start justify-between mb-3">
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900 mb-1 line-clamp-2">
+          <div className="flex-1 min-w-0">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1 line-clamp-2">
               {repository.name}
             </h3>
-            <p className="text-sm text-gray-600 mb-2">
+            <p className="text-xs sm:text-sm text-gray-600 mb-2 truncate">
               {repository.full_name}
             </p>
           </div>
@@ -34,9 +34,9 @@ const RepositoryCard = ({ repository }) => {
             href={repository.html_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-600 hover:text-blue-800 transition-colors duration-200"
+            className="text-blue-600 hover:text-blue-800 transition-colors duration-200 flex-shrink-0 ml-2"
           >
-            <ExternalLink className="w-5 h-5" />
+            <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5" />
           </a>
         </div>
         
@@ -62,37 +62,37 @@ const RepositoryCard = ({ repository }) => {
       </div>
 
       {/* Stats */}
-      <div className="px-6 py-4">
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="flex items-center space-x-3 text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
-            <div className="p-2 bg-yellow-100 rounded-lg group-hover:bg-yellow-200 transition-colors duration-300">
-              <Star className="w-4 h-4 text-yellow-600" />
+      <div className="px-4 sm:px-6 py-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4">
+          <div className="flex items-center space-x-2 sm:space-x-3 text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
+            <div className="p-1.5 sm:p-2 bg-yellow-100 rounded-lg group-hover:bg-yellow-200 transition-colors duration-300">
+              <Star className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-600" />
             </div>
-            <span className="text-sm font-semibold">
+            <span className="text-xs sm:text-sm font-semibold">
               {formatNumber(repository.stargazers_count)}
             </span>
           </div>
-          <div className="flex items-center space-x-3 text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
-            <div className="p-2 bg-blue-100 rounded-lg group-hover:bg-blue-200 transition-colors duration-300">
-              <GitBranch className="w-4 h-4 text-blue-600" />
+          <div className="flex items-center space-x-2 sm:space-x-3 text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
+            <div className="p-1.5 sm:p-2 bg-blue-100 rounded-lg group-hover:bg-blue-200 transition-colors duration-300">
+              <GitBranch className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" />
             </div>
-            <span className="text-sm font-semibold">
+            <span className="text-xs sm:text-sm font-semibold">
               {formatNumber(repository.forks_count)}
             </span>
           </div>
-          <div className="flex items-center space-x-3 text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
-            <div className="p-2 bg-green-100 rounded-lg group-hover:bg-green-200 transition-colors duration-300">
-              <Eye className="w-4 h-4 text-green-600" />
+          <div className="flex items-center space-x-2 sm:space-x-3 text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
+            <div className="p-1.5 sm:p-2 bg-green-100 rounded-lg group-hover:bg-green-200 transition-colors duration-300">
+              <Eye className="w-3 h-3 sm:w-4 sm:h-4 text-green-600" />
             </div>
-            <span className="text-sm font-semibold">
+            <span className="text-xs sm:text-sm font-semibold">
               {formatNumber(repository.watchers_count)}
             </span>
           </div>
-          <div className="flex items-center space-x-3 text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
-            <div className="p-2 bg-purple-100 rounded-lg group-hover:bg-purple-200 transition-colors duration-300">
-              <Calendar className="w-4 h-4 text-purple-600" />
+          <div className="flex items-center space-x-2 sm:space-x-3 text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
+            <div className="p-1.5 sm:p-2 bg-purple-100 rounded-lg group-hover:bg-purple-200 transition-colors duration-300">
+              <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-purple-600" />
             </div>
-            <span className="text-sm font-semibold">
+            <span className="text-xs sm:text-sm font-semibold truncate">
               {formatDate(repository.updated_at)}
             </span>
           </div>

@@ -122,7 +122,7 @@ export default function Home() {
 
     if (repositories.length > 0) {
       return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {repositories.map((repo) => (
             <RepositoryCard key={repo.id} repository={repo} />
           ))}
@@ -183,45 +183,49 @@ export default function Home() {
           }}></div>
         </div>
         
+        {/* Mobile Background Pattern */}
+        <div className="absolute inset-0 sm:hidden opacity-10">
+          <div className="absolute inset-0 bg-gradient-to-b from-purple-500/20 via-transparent to-blue-500/20"></div>
+        </div>
+        
         {/* Header */}
         <header className="relative z-10 backdrop-blur-md bg-white/5 border-b border-white/10 shadow-2xl">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-20">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <Github className="w-7 h-7 text-white" />
+            <div className="flex flex-col sm:flex-row items-center justify-between py-4 sm:py-0 sm:h-20 space-y-4 sm:space-y-0">
+              <div className="flex items-center space-x-3 sm:space-x-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Github className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
                 </div>
-                <div>
-                  <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
+                <div className="text-center sm:text-left">
+                  <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
                     SearchRustyn
                   </h1>
-                  <p className="text-purple-200 text-sm font-medium">Repository Discovery Platform</p>
+                  <p className="text-purple-200 text-xs sm:text-sm font-medium">Repository Discovery Platform</p>
                 </div>
               </div>
-              <div className="hidden md:block">
-                <div className="flex items-center space-x-6 text-purple-200">
-                  <a
-                    href="https://github.com/jaiyankargupta"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center space-x-2 text-sm font-medium hover:underline"
-                  >
-                    <Github className="w-5 h-5" />
-                    <span>jaiyankargupta</span>
-                  </a>
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                </div>
+              <div className="flex items-center space-x-4 sm:space-x-6 text-purple-200">
+                <a
+                  href="https://github.com/jaiyankargupta"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center space-x-2 text-xs sm:text-sm font-medium hover:underline"
+                >
+                  <Github className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="hidden sm:inline">jaiyankargupta</span>
+                  <span className="sm:hidden">GitHub</span>
+                </a>
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
               </div>
             </div>
           </div>
         </header>
 
         {/* Main Content */}
-        <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           {/* Feature Tabs */}
-          <div className="mb-12">
+          <div className="mb-8 sm:mb-12">
             <div className="flex justify-center">
-              <div className="inline-flex rounded-2xl bg-white/10 p-2 backdrop-blur-sm border border-white/20 shadow-xl">
+              <div className="inline-flex flex-col sm:flex-row rounded-2xl bg-white/10 p-2 backdrop-blur-md border border-white/20 shadow-xl w-full sm:w-auto max-w-sm sm:max-w-none">
                 {[
                   { id: 'search', label: 'Search', icon: Search },
                   { id: 'readme', label: 'README Generator', icon: FileText },
@@ -230,14 +234,14 @@ export default function Home() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`px-8 py-4 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center space-x-3 ${
+                    className={`px-4 sm:px-8 py-3 sm:py-4 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 flex items-center justify-center sm:justify-start space-x-2 sm:space-x-3 w-full sm:w-auto ${
                       activeTab === tab.id
                         ? 'bg-gradient-to-r from-purple-500 to-blue-600 text-white shadow-2xl transform scale-105'
-                        : 'text-white/70 hover:text-white hover:bg-white/10'
+                        : 'text-white/70 hover:text-white hover:bg-white/10 hover:scale-105'
                     }`}
                   >
-                    <tab.icon className="w-5 h-5" />
-                    <span>{tab.label}</span>
+                    <tab.icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="truncate">{tab.label}</span>
                   </button>
                 ))}
               </div>
@@ -248,7 +252,7 @@ export default function Home() {
           {activeTab === 'search' && (
             <>
               {/* Search Mode Toggle - Only visible in Search tab */}
-              <div className="mb-12">
+              <div className="mb-8 sm:mb-12">
                 <SearchModeToggle
                   modes={searchModes}
                   activeMode={searchMode}
@@ -257,7 +261,7 @@ export default function Home() {
               </div>
 
               {/* Search Bar - Only visible in Search tab */}
-              <div className="mb-12">
+              <div className="mb-8 sm:mb-12">
                 <SearchBar
                   onSearch={handleSearch}
                   onFocus={handleSearchBarFocus}
@@ -269,7 +273,7 @@ export default function Home() {
               </div>
 
               {/* Search Results */}
-              <div className="space-y-8">
+              <div className="space-y-6 sm:space-y-8">
                 {renderSearchResults()}
               </div>
             </>
