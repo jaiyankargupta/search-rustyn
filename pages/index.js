@@ -1,52 +1,57 @@
-import React, { useState } from 'react';
-import { Search, Github, FileText, Users } from 'lucide-react';
-import Link from 'next/link';
-import SearchModeToggle from '../components/SearchModeToggle';
-import SearchBar from '../components/SearchBar';
-import RepositoryCard from '../components/RepositoryCard';
-import UserProfileCard from '../components/UserProfileCard';
-import ReadmeGenerator from '../components/ReadmeGenerator';
-import UserBattle from '../components/UserBattle';
-import OpenSourceTab from '../components/OpenSourceTab';
-import LoadingSpinner from '../components/LoadingSpinner';
-import Head from 'next/head';
+import React, { useState } from "react";
+import { Search, Github, FileText, Users } from "lucide-react";
+import Link from "next/link";
+import SearchModeToggle from "../components/SearchModeToggle";
+import SearchBar from "../components/SearchBar";
+import RepositoryCard from "../components/RepositoryCard";
+import UserProfileCard from "../components/UserProfileCard";
+import ReadmeGenerator from "../components/ReadmeGenerator";
+import UserBattle from "../components/UserBattle";
+import OpenSourceTab from "../components/OpenSourceTab";
+import LoadingSpinner from "../components/LoadingSpinner";
+import Head from "next/head";
 
 export default function Home() {
-  const [searchMode, setSearchMode] = useState('idea');
-  const [query, setQuery] = useState('');
+  const [searchMode, setSearchMode] = useState("idea");
+  const [query, setQuery] = useState("");
   const [repositories, setRepositories] = useState([]);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showAllRepos, setShowAllRepos] = useState(false);
-  const [activeTab, setActiveTab] = useState('search');
+  const [activeTab, setActiveTab] = useState("search");
+  // Filter states
+  const [stars, setStars] = useState("");
+  const [year, setYear] = useState("");
+  const [language, setLanguage] = useState("");
 
   const searchModes = [
-    { id: 'idea', label: 'Search by Ideas', icon: '💡' },
-    { id: 'repo', label: 'Search by Repo Name', icon: '📁' },
-    { id: 'owner', label: 'Search by Owner', icon: '👤' },
-    { id: 'user', label: 'GitHub User Profile', icon: '👨‍💻' }
+    { id: "idea", label: "Search by Ideas", icon: "💡" },
+    { id: "repo", label: "Search by Repo Name", icon: "📁" },
+    { id: "owner", label: "Search by Owner", icon: "👤" },
+    { id: "user", label: "GitHub User Profile", icon: "👨‍💻" },
   ];
 
   const getApiUrl = (searchQuery, mode) => {
-    if (mode === 'user') {
+    if (mode === "user") {
       return `/api/github-user?username=${searchQuery}`;
     }
-    
     const params = new URLSearchParams({
       query: searchQuery,
       page: 1,
-      per_page: 10
+      per_page: 15,
     });
-
-    if (mode === 'idea') {
-      params.append('mode', 'idea');
-    } else if (mode === 'repo') {
-      params.append('mode', 'repo');
-    } else if (mode === 'owner') {
-      params.append('mode', 'find');
+    if (mode === "idea") {
+      params.append("mode", "idea");
+    } else if (mode === "repo") {
+      params.append("mode", "repo");
+    } else if (mode === "owner") {
+      params.append("mode", "find");
     }
-
+    // Add filters if set
+    if (stars) params.append("stars", stars);
+    if (year) params.append("year", year);
+    if (language) params.append("language", language);
     return `/api/search-repos?${params.toString()}`;
   };
 
@@ -60,26 +65,26 @@ export default function Home() {
 
     try {
       const response = await fetch(getApiUrl(searchQuery, searchMode), {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
       });
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      
-      if (searchMode === 'user') {
+
+      if (searchMode === "user") {
         setUserData(data);
       } else {
         setRepositories(data.items || []);
       }
     } catch (err) {
-      setError('Failed to fetch data. Please try again.');
-      console.error('Search error:', err);
+      setError("Failed to fetch data. Please try again.");
+      console.error("Search error:", err);
     } finally {
       setLoading(false);
     }
@@ -94,7 +99,7 @@ export default function Home() {
     setSearchMode(mode);
     setRepositories([]);
     setUserData(null);
-    setQuery('');
+    setQuery("");
     setError(null);
   };
 
@@ -109,7 +114,7 @@ export default function Home() {
 
   const renderSearchResults = () => {
     if (loading) return <LoadingSpinner />;
-    
+
     if (error) {
       return (
         <div className="bg-red-50 border border-red-200 rounded-xl p-6 shadow-lg">
@@ -118,7 +123,7 @@ export default function Home() {
       );
     }
 
-    if (searchMode === 'user' && userData) {
+    if (searchMode === "user" && userData) {
       return <UserProfileCard userData={userData} />;
     }
 
@@ -171,25 +176,31 @@ export default function Home() {
     <>
       <Head>
         <title>SearchRustyn - Repository Search</title>
-        <meta name="description" content="Search repositories by name, owner, or ideas" />
+        <meta
+          name="description"
+          content="Search repositories by name, owner, or ideas"
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      
+
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10"></div>
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 25% 25%, rgba(147, 51, 234, 0.1) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(59, 130, 246, 0.1) 0%, transparent 50%)`
-          }}></div>
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle at 25% 25%, rgba(147, 51, 234, 0.1) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(59, 130, 246, 0.1) 0%, transparent 50%)`,
+            }}
+          ></div>
         </div>
-        
+
         {/* Mobile Background Pattern */}
         <div className="absolute inset-0 sm:hidden opacity-10">
           <div className="absolute inset-0 bg-gradient-to-b from-purple-500/20 via-transparent to-blue-500/20"></div>
         </div>
-        
+
         {/* Header */}
         <header className="relative z-10 backdrop-blur-md bg-white/5 border-b border-white/10 shadow-2xl">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -202,7 +213,9 @@ export default function Home() {
                   <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
                     SearchRustyn
                   </h1>
-                  <p className="text-purple-200 text-xs sm:text-sm font-medium">Repository Discovery Platform</p>
+                  <p className="text-purple-200 text-xs sm:text-sm font-medium">
+                    Repository Discovery Platform
+                  </p>
                 </div>
               </div>
               <div className="flex items-center space-x-4 sm:space-x-6 text-purple-200">
@@ -229,18 +242,18 @@ export default function Home() {
             <div className="flex justify-center">
               <div className="inline-flex flex-col sm:flex-row rounded-2xl bg-white/10 p-2 backdrop-blur-md border border-white/20 shadow-xl w-full sm:w-auto max-w-sm sm:max-w-none">
                 {[
-                  { id: 'search', label: 'Search', icon: Search },
-                  { id: 'readme', label: 'README Generator', icon: FileText },
-                  { id: 'battle', label: 'User Battle', icon: Users },
-                  { id: 'opensource', label: 'Open Source', icon: Github }
+                  { id: "search", label: "Search", icon: Search },
+                  { id: "readme", label: "README Generator", icon: FileText },
+                  { id: "battle", label: "User Battle", icon: Users },
+                  { id: "opensource", label: "Open Source", icon: Github },
                 ].map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={`px-4 sm:px-8 py-3 sm:py-4 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 flex items-center justify-center sm:justify-start space-x-2 sm:space-x-3 w-full sm:w-auto ${
                       activeTab === tab.id
-                        ? 'bg-gradient-to-r from-purple-500 to-blue-600 text-white shadow-2xl transform scale-105'
-                        : 'text-white/70 hover:text-white hover:bg-white/10 hover:scale-105'
+                        ? "bg-gradient-to-r from-purple-500 to-blue-600 text-white shadow-2xl transform scale-105"
+                        : "text-white/70 hover:text-white hover:bg-white/10 hover:scale-105"
                     }`}
                   >
                     <tab.icon className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -252,7 +265,7 @@ export default function Home() {
           </div>
 
           {/* Content Based on Active Tab */}
-          {activeTab === 'search' && (
+          {activeTab === "search" && (
             <>
               {/* Search Mode Toggle - Only visible in Search tab */}
               <div className="mb-8 sm:mb-12">
@@ -263,13 +276,52 @@ export default function Home() {
                 />
               </div>
 
+              {/* Filter Bar */}
+              <div className="mb-6 flex flex-col sm:flex-row gap-4 items-center justify-center">
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="Stars"
+                  value={stars}
+                  onChange={(e) => setStars(e.target.value)}
+                  className="px-4 py-2 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 text-sm"
+                  style={{ width: "120px" }}
+                />
+                <input
+                  type="number"
+                  min="2008"
+                  max={new Date().getFullYear()}
+                  placeholder="Year"
+                  value={year}
+                  onChange={(e) => setYear(e.target.value)}
+                  className="px-4 py-2 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 text-sm"
+                  style={{ width: "120px" }}
+                />
+                <input
+                  type="text"
+                  placeholder="Language"
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  className="px-4 py-2 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 text-sm"
+                  style={{ width: "120px" }}
+                />
+              </div>
+
               {/* Search Bar - Only visible in Search tab */}
               <div className="mb-8 sm:mb-12">
                 <SearchBar
                   onSearch={handleSearch}
                   onFocus={handleSearchBarFocus}
                   onBlur={handleSearchBarBlur}
-                  placeholder={`Search ${searchMode === 'user' ? 'GitHub username' : searchMode === 'idea' ? 'repositories by ideas' : searchMode === 'repo' ? 'repositories by name' : 'repositories by owner'}...`}
+                  placeholder={`Search ${
+                    searchMode === "user"
+                      ? "GitHub username"
+                      : searchMode === "idea"
+                      ? "repositories by ideas"
+                      : searchMode === "repo"
+                      ? "repositories by name"
+                      : "repositories by owner"
+                  }...`}
                   value={query}
                   onChange={setQuery}
                 />
@@ -282,19 +334,19 @@ export default function Home() {
             </>
           )}
 
-          {activeTab === 'readme' && (
+          {activeTab === "readme" && (
             <div className="max-w-4xl mx-auto">
               <ReadmeGenerator />
             </div>
           )}
 
-          {activeTab === 'battle' && (
+          {activeTab === "battle" && (
             <div className="max-w-4xl mx-auto">
               <UserBattle />
             </div>
           )}
 
-          {activeTab === 'opensource' && (
+          {activeTab === "opensource" && (
             <div className="max-w-6xl mx-auto">
               <OpenSourceTab />
             </div>

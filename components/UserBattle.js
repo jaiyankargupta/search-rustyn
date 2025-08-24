@@ -1,15 +1,23 @@
-import React, { useState } from 'react';
-import { Users, Zap, Trophy, TrendingUp, Loader, User, Search } from 'lucide-react';
+import React, { useState } from "react";
+import {
+  Users,
+  Zap,
+  Trophy,
+  TrendingUp,
+  Loader,
+  User,
+  Search,
+} from "lucide-react";
 
 const UserBattle = () => {
-  const [user1, setUser1] = useState('');
-  const [user2, setUser2] = useState('');
+  const [user1, setUser1] = useState("");
+  const [user2, setUser2] = useState("");
   const [battleResult, setBattleResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  
+
   // New state for profile search
-  const [profileUsername, setProfileUsername] = useState('');
+  const [profileUsername, setProfileUsername] = useState("");
   const [profileData, setProfileData] = useState(null);
   const [profileLoading, setProfileLoading] = useState(false);
   const [profileError, setProfileError] = useState(null);
@@ -22,8 +30,10 @@ const UserBattle = () => {
     setProfileData(null);
 
     try {
-      const response = await fetch(`/api/github-user?username=${profileUsername}`);
-      
+      const response = await fetch(
+        `/api/github-user?username=${profileUsername}`
+      );
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -31,8 +41,10 @@ const UserBattle = () => {
       const data = await response.json();
       setProfileData(data);
     } catch (err) {
-      setProfileError(err.message || 'Failed to fetch profile. Please try again.');
-      console.error('Profile fetch error:', err);
+      setProfileError(
+        err.message || "Failed to fetch profile. Please try again."
+      );
+      console.error("Profile fetch error:", err);
     } finally {
       setProfileLoading(false);
     }
@@ -47,27 +59,26 @@ const UserBattle = () => {
 
     try {
       const response = await fetch(`/api/generate-roast`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ user1, user2 }),
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
       const data = await response.json();
-      
-      if (data.error) {
-        throw new Error(data.error);
+
+      if (!response.ok || data.error) {
+        setError("Check username on GitHub Profile Lookup.");
+        setBattleResult(null);
+        return;
       }
 
       setBattleResult(data);
     } catch (err) {
-      setError(err.message || 'Failed to generate battle. Please try again.');
-      console.error('Battle generation error:', err);
+      setError("Check username on GitHub Profile Lookup.");
+      setBattleResult(null);
+      console.error("Battle generation error:", err);
     } finally {
       setLoading(false);
     }
@@ -75,25 +86,29 @@ const UserBattle = () => {
 
   const getWinner = () => {
     if (!battleResult) return null;
-    
-    const user1Score = battleResult.user1.stats.totalStars + battleResult.user1.stats.contributions;
-    const user2Score = battleResult.user2.stats.totalStars + battleResult.user2.stats.contributions;
-    
+
+    const user1Score =
+      battleResult.user1.stats.totalStars +
+      battleResult.user1.stats.contributions;
+    const user2Score =
+      battleResult.user2.stats.totalStars +
+      battleResult.user2.stats.contributions;
+
     return user1Score > user2Score ? battleResult.user1 : battleResult.user2;
   };
 
   const formatNumber = (num) => {
     if (num >= 1000) {
-      return (num / 1000).toFixed(1) + 'k';
+      return (num / 1000).toFixed(1) + "k";
     }
     return num;
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
@@ -106,12 +121,14 @@ const UserBattle = () => {
             <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-lg flex items-center justify-center">
               <User className="w-4 h-4 sm:w-6 sm:h-6 text-blue-600" />
             </div>
-            <h2 className="text-lg sm:text-xl font-bold text-gray-900">GitHub Profile Lookup</h2>
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900">
+              GitHub Profile Lookup
+            </h2>
           </div>
           <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">
             Search for a GitHub user to view their profile and statistics
           </p>
-          
+
           {/* Profile Search Input */}
           <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
             <input
@@ -157,14 +174,16 @@ const UserBattle = () => {
                   className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-blue-100"
                 />
               </div>
-              
+
               <div className="flex-1 text-center sm:text-left">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 space-y-2 sm:space-y-0">
                   <div>
                     <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
                       {profileData.user.name || profileData.user.login}
                     </h3>
-                    <p className="text-gray-600 text-base sm:text-lg">@{profileData.user.login}</p>
+                    <p className="text-gray-600 text-base sm:text-lg">
+                      @{profileData.user.login}
+                    </p>
                   </div>
                   <a
                     href={profileData.user.html_url}
@@ -175,38 +194,58 @@ const UserBattle = () => {
                     <User className="w-5 h-5 sm:w-6 sm:h-6" />
                   </a>
                 </div>
-                
+
                 {profileData.user.bio && (
-                  <p className="text-gray-700 mb-4 text-sm sm:text-base">{profileData.user.bio}</p>
+                  <p className="text-gray-700 mb-4 text-sm sm:text-base">
+                    {profileData.user.bio}
+                  </p>
                 )}
-                
+
                 {/* Quick Stats */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4">
                   <div className="text-center">
-                    <div className="text-lg sm:text-xl font-bold text-blue-600">{profileData.user.public_repos}</div>
-                    <div className="text-xs sm:text-sm text-gray-600">Repos</div>
+                    <div className="text-lg sm:text-xl font-bold text-blue-600">
+                      {profileData.user.public_repos}
+                    </div>
+                    <div className="text-xs sm:text-sm text-gray-600">
+                      Repos
+                    </div>
                   </div>
                   <div className="text-center">
-                    <div className="text-lg sm:text-xl font-bold text-yellow-600">{formatNumber(profileData.stats.totalStars)}</div>
-                    <div className="text-xs sm:text-sm text-gray-600">Stars</div>
+                    <div className="text-lg sm:text-xl font-bold text-yellow-600">
+                      {formatNumber(profileData.stats.totalStars)}
+                    </div>
+                    <div className="text-xs sm:text-sm text-gray-600">
+                      Stars
+                    </div>
                   </div>
                   <div className="text-center">
-                    <div className="text-lg sm:text-xl font-bold text-green-600">{formatNumber(profileData.stats.totalForks)}</div>
-                    <div className="text-xs sm:text-sm text-gray-600">Forks</div>
+                    <div className="text-lg sm:text-xl font-bold text-green-600">
+                      {formatNumber(profileData.stats.totalForks)}
+                    </div>
+                    <div className="text-xs sm:text-sm text-gray-600">
+                      Forks
+                    </div>
                   </div>
                   <div className="text-center">
-                    <div className="text-lg sm:text-xl font-bold text-purple-600">{formatNumber(profileData.stats.contributions)}</div>
-                    <div className="text-xs sm:text-sm text-gray-600">Contributions</div>
+                    <div className="text-lg sm:text-xl font-bold text-purple-600">
+                      {formatNumber(profileData.stats.contributions)}
+                    </div>
+                    <div className="text-xs sm:text-sm text-gray-600">
+                      Contributions
+                    </div>
                   </div>
                 </div>
-                
+
                 {/* Top Languages */}
                 {profileData.stats.languageStats && (
                   <div className="mb-4">
-                    <h4 className="font-medium text-gray-900 mb-2">Top Languages</h4>
+                    <h4 className="font-medium text-gray-900 mb-2">
+                      Top Languages
+                    </h4>
                     <div className="flex flex-wrap gap-2">
                       {Object.entries(profileData.stats.languageStats)
-                        .sort(([,a], [,b]) => b.percentage - a.percentage)
+                        .sort(([, a], [, b]) => b.percentage - a.percentage)
                         .slice(0, 5)
                         .map(([language, data]) => (
                           <span
@@ -219,12 +258,16 @@ const UserBattle = () => {
                     </div>
                   </div>
                 )}
-                
+
                 {/* Member Info */}
                 <div className="text-sm text-gray-500">
-                  <span>Member since: {formatDate(profileData.user.created_at)}</span>
+                  <span>
+                    Member since: {formatDate(profileData.user.created_at)}
+                  </span>
                   <span className="mx-2">•</span>
-                  <span>Last updated: {formatDate(profileData.user.updated_at)}</span>
+                  <span>
+                    Last updated: {formatDate(profileData.user.updated_at)}
+                  </span>
                 </div>
               </div>
             </div>
@@ -240,12 +283,14 @@ const UserBattle = () => {
             <div className="w-8 h-8 sm:w-10 sm:h-10 bg-purple-100 rounded-lg flex items-center justify-center">
               <Users className="w-4 h-4 sm:w-6 sm:h-6 text-purple-600" />
             </div>
-            <h2 className="text-lg sm:text-xl font-bold text-gray-900">User Battle</h2>
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900">
+              User Battle
+            </h2>
           </div>
           <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">
             Compare two GitHub users and see who comes out on top! 🥊
           </p>
-          
+
           {/* Input Form */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
             <div>
@@ -273,7 +318,7 @@ const UserBattle = () => {
               />
             </div>
           </div>
-          
+
           <button
             onClick={startBattle}
             disabled={loading || !user1.trim() || !user2.trim()}
@@ -304,7 +349,9 @@ const UserBattle = () => {
         {battleResult && (
           <div className="p-4 sm:p-6">
             <div className="text-center mb-4 sm:mb-6">
-              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Battle Results</h3>
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+                Battle Results
+              </h3>
               {getWinner() && (
                 <div className="flex items-center justify-center space-x-2 text-yellow-600">
                   <Trophy className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -313,6 +360,79 @@ const UserBattle = () => {
                   </span>
                 </div>
               )}
+            </div>
+
+            {/* Roast Display */}
+            <div className="mb-6">
+              <h4 className="font-semibold text-gray-900 mb-2">Roast</h4>
+              <div className="bg-gray-100 p-3 rounded text-sm whitespace-pre-line">
+                {battleResult.roast.split("\n").map((line, idx) => {
+                  // Helper to render markdown bold/italic
+                  const renderMarkdown = (text) => {
+                    // Replace **bold**
+                    text = text.replace(
+                      /\*\*(.*?)\*\*/g,
+                      "<strong>$1</strong>"
+                    );
+                    // Replace *italic*
+                    text = text.replace(/\*(.*?)\*/g, "<em>$1</em>");
+                    return text;
+                  };
+                  let className = "mb-1";
+                  if (line.startsWith("🏆"))
+                    className = "font-bold text-blue-700 mt-2 mb-1";
+                  if (line.startsWith("💀"))
+                    className = "font-bold text-red-900 mt-2 mb-1";
+                  if (line.startsWith("🔥")) className = "text-orange-600 mb-1";
+                  return (
+                    <div
+                      key={idx}
+                      className={className}
+                      dangerouslySetInnerHTML={{ __html: renderMarkdown(line) }}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Battle Stats */}
+            <div className="mb-6">
+              <h4 className="font-semibold text-gray-900 mb-2">Battle Stats</h4>
+              <ul className="grid grid-cols-2 gap-2 text-sm">
+                <li>
+                  Total Commits Compared:{" "}
+                  {battleResult.battleStats.totalCommitsCompared}
+                </li>
+                <li>
+                  Total Stars Clashed:{" "}
+                  {battleResult.battleStats.totalStarsClashed}
+                </li>
+                <li>
+                  Total Repos Judged:{" "}
+                  {battleResult.battleStats.totalReposJudged}
+                </li>
+                <li>
+                  Total Contributions:{" "}
+                  {battleResult.battleStats.totalContributions}
+                </li>
+              </ul>
+            </div>
+
+            {/* Top Languages */}
+            <div className="mb-6">
+              <h4 className="font-semibold text-gray-900 mb-2">
+                Top Languages
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">
+                  {battleResult.user1.user.login}:{" "}
+                  {battleResult.topLanguages.user1.join(", ")}
+                </span>
+                <span className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">
+                  {battleResult.user2.user.login}:{" "}
+                  {battleResult.topLanguages.user2.join(", ")}
+                </span>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
@@ -326,12 +446,14 @@ const UserBattle = () => {
                   />
                   <div>
                     <h4 className="font-bold text-gray-900">
-                      {battleResult.user1.user.name || battleResult.user1.user.login}
+                      {battleResult.user1.user.name ||
+                        battleResult.user1.user.login}
                     </h4>
-                    <p className="text-sm text-gray-600">@{battleResult.user1.user.login}</p>
+                    <p className="text-sm text-gray-600">
+                      @{battleResult.user1.user.login}
+                    </p>
                   </div>
                 </div>
-                
                 <div className="grid grid-cols-2 gap-3 text-sm">
                   <div className="text-center">
                     <div className="text-lg font-bold text-blue-600">
@@ -370,12 +492,14 @@ const UserBattle = () => {
                   />
                   <div>
                     <h4 className="font-bold text-gray-900">
-                      {battleResult.user2.user.name || battleResult.user2.user.login}
+                      {battleResult.user2.user.name ||
+                        battleResult.user2.user.login}
                     </h4>
-                    <p className="text-sm text-gray-600">@{battleResult.user2.user.login}</p>
+                    <p className="text-sm text-gray-600">
+                      @{battleResult.user2.user.login}
+                    </p>
                   </div>
                 </div>
-                
                 <div className="grid grid-cols-2 gap-3 text-sm">
                   <div className="text-center">
                     <div className="text-lg font-bold text-blue-600">
@@ -413,25 +537,43 @@ const UserBattle = () => {
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <h5 className="font-medium text-blue-600 mb-2">{battleResult.user1.user.login}'s Top Repos</h5>
+                  <h5 className="font-medium text-blue-600 mb-2">
+                    {battleResult.user1.user.login}'s Top Repos
+                  </h5>
                   <div className="space-y-2">
-                    {battleResult.user1.stats.topRepos?.slice(0, 3).map((repo) => (
-                      <div key={repo.name} className="text-sm bg-blue-50 p-2 rounded">
-                        <div className="font-medium">{repo.name}</div>
-                        <div className="text-gray-600">{repo.stars} ⭐ {repo.language}</div>
-                      </div>
-                    ))}
+                    {battleResult.user1.stats.topRepos
+                      ?.slice(0, 3)
+                      .map((repo) => (
+                        <div
+                          key={repo.name}
+                          className="text-sm bg-blue-50 p-2 rounded"
+                        >
+                          <div className="font-medium">{repo.name}</div>
+                          <div className="text-gray-600">
+                            {repo.stars} ⭐ {repo.language}
+                          </div>
+                        </div>
+                      ))}
                   </div>
                 </div>
                 <div>
-                  <h5 className="font-medium text-green-600 mb-2">{battleResult.user2.user.login}'s Top Repos</h5>
+                  <h5 className="font-medium text-green-600 mb-2">
+                    {battleResult.user2.user.login}'s Top Repos
+                  </h5>
                   <div className="space-y-2">
-                    {battleResult.user2.stats.topRepos?.slice(0, 3).map((repo) => (
-                      <div key={repo.name} className="text-sm bg-green-50 p-2 rounded">
-                        <div className="font-medium">{repo.name}</div>
-                        <div className="text-gray-600">{repo.stars} ⭐ {repo.language}</div>
-                      </div>
-                    ))}
+                    {battleResult.user2.stats.topRepos
+                      ?.slice(0, 3)
+                      .map((repo) => (
+                        <div
+                          key={repo.name}
+                          className="text-sm bg-green-50 p-2 rounded"
+                        >
+                          <div className="font-medium">{repo.name}</div>
+                          <div className="text-gray-600">
+                            {repo.stars} ⭐ {repo.language}
+                          </div>
+                        </div>
+                      ))}
                   </div>
                 </div>
               </div>
