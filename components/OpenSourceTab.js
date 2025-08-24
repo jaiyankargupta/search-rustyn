@@ -1,33 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Github, ExternalLink, Calendar, Users, Code, Filter } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import {
+  Search,
+  Github,
+  ExternalLink,
+  Calendar,
+  Users,
+  Code,
+  Filter,
+} from "lucide-react";
 
 const OpenSourceTab = () => {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [selectedFilter, setSelectedFilter] = useState('good first issue');
-  const [selectedLanguage, setSelectedLanguage] = useState('python');
+  const [selectedFilter, setSelectedFilter] = useState("good first issue");
+  const [selectedLanguage, setSelectedLanguage] = useState("python");
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  const availableFilters = [
-    'good first issue',
-    'major issue'
-  ];
+  const availableFilters = ["good first issue", "major issue"];
 
   const popularLanguages = [
-    'python', 'javascript', 'typescript', 'java', 'c++', 'c#', 'go', 'rust', 'php', 'ruby', 'swift', 'kotlin', 'dart', 'scala'
+    "python",
+    "javascript",
+    "typescript",
+    "java",
+    "c++",
+    "c#",
+    "go",
+    "rust",
+    "php",
+    "ruby",
+    "swift",
+    "kotlin",
+    "dart",
+    "scala",
   ];
 
   const fetchTrendingRepos = async (resetPage = false) => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const currentPage = resetPage ? 1 : page;
-      
+
       const response = await fetch(
-        `/api/search-trending-repos?filter=${encodeURIComponent(selectedFilter)}&language=${encodeURIComponent(selectedLanguage)}&page=${currentPage}&per_page=15`
+        `/api/search-trending-repos?filter=${encodeURIComponent(
+          selectedFilter
+        )}&language=${encodeURIComponent(
+          selectedLanguage
+        )}&page=${currentPage}&per_page=15`
       );
 
       if (!response.ok) {
@@ -35,18 +57,18 @@ const OpenSourceTab = () => {
       }
 
       const data = await response.json();
-      
+
       if (resetPage) {
         setRepos(data.items || []);
         setPage(1);
       } else {
-        setRepos(prev => [...prev, ...(data.items || [])]);
+        setRepos((prev) => [...prev, ...(data.items || [])]);
       }
-      
+
       setHasMore(data.has_more || false);
     } catch (err) {
-      setError(err.message || 'Failed to fetch trending repos');
-      console.error('Error fetching trending repos:', err);
+      setError(err.message || "Failed to fetch trending repos");
+      console.error("Error fetching trending repos:", err);
     } finally {
       setLoading(false);
     }
@@ -66,16 +88,16 @@ const OpenSourceTab = () => {
 
   const loadMore = () => {
     if (!loading && hasMore) {
-      setPage(prev => prev + 1);
+      setPage((prev) => prev + 1);
       fetchTrendingRepos();
     }
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
@@ -92,8 +114,8 @@ const OpenSourceTab = () => {
           </h2>
         </div>
         <p className="text-gray-600 max-w-3xl mx-auto text-lg leading-relaxed">
-          Discover trending repositories with good first issues and major issues. 
-          Find the perfect open source projects to contribute to! 🚀
+          Discover trending repositories with good first issues and major
+          issues. Find the perfect open source projects to contribute to! 🚀
         </p>
       </div>
 
@@ -115,11 +137,13 @@ const OpenSourceTab = () => {
                   onClick={() => handleFilterChange(filter)}
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                     selectedFilter === filter
-                      ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-lg transform scale-105'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
+                      ? "bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-lg transform scale-105"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105"
                   }`}
                 >
-                  {filter === 'good first issue' ? '🚀 Good First Issue' : '🔥 Major Issue'}
+                  {filter === "good first issue"
+                    ? "🚀 Good First Issue"
+                    : "🔥 Major Issue"}
                 </button>
               ))}
             </div>
@@ -140,26 +164,14 @@ const OpenSourceTab = () => {
                   onClick={() => handleLanguageChange(language)}
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                     selectedLanguage === language
-                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg transform scale-105'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
+                      ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg transform scale-105"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105"
                   }`}
                 >
                   {language}
                 </button>
               ))}
             </div>
-          </div>
-
-          {/* Search Button */}
-          <div className="text-center">
-            <button
-              onClick={() => fetchTrendingRepos(true)}
-              disabled={loading}
-              className="px-10 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:from-green-600 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center space-x-3 mx-auto shadow-lg hover:shadow-xl transform hover:scale-105 font-semibold text-lg"
-            >
-              <Search className="w-5 h-5" />
-              <span>Discover Trending Repositories</span>
-            </button>
           </div>
         </div>
       </div>
@@ -174,22 +186,36 @@ const OpenSourceTab = () => {
       {/* Repositories Display */}
       <div className="space-y-4">
         {repos.map((repo) => (
-          <div key={repo.id} className="bg-white/95 backdrop-blur-md rounded-xl shadow-lg border border-white/30 p-6 hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1">
+          <div
+            key={repo.id}
+            className="bg-white/95 backdrop-blur-md rounded-xl shadow-lg border border-white/30 p-6 hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1"
+          >
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
                 <div className="flex items-center space-x-3 mb-3">
                   <h3 className="text-lg font-semibold text-gray-900 hover:text-green-600">
-                    <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 group">
-                      <span className="text-green-600 font-mono bg-green-50 px-2 py-1 rounded-lg">📦</span>
-                      <span className="group-hover:text-green-600 transition-colors">{repo.full_name}</span>
+                    <a
+                      href={repo.html_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center space-x-2 group"
+                    >
+                      <span className="text-green-600 font-mono bg-green-50 px-2 py-1 rounded-lg">
+                        📦
+                      </span>
+                      <span className="group-hover:text-green-600 transition-colors">
+                        {repo.full_name}
+                      </span>
                       <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-green-600 transition-colors" />
                     </a>
                   </h3>
                 </div>
-                
+
                 {/* Description */}
                 {repo.description && (
-                  <p className="text-gray-700 mb-3 line-clamp-2">{repo.description}</p>
+                  <p className="text-gray-700 mb-3 line-clamp-2">
+                    {repo.description}
+                  </p>
                 )}
 
                 {/* Topics */}
@@ -210,7 +236,9 @@ const OpenSourceTab = () => {
                 <div className="flex items-center space-x-6 text-sm text-gray-600">
                   <div className="flex items-center space-x-1">
                     <span className="text-yellow-500">⭐</span>
-                    <span>{repo.stargazers_count?.toLocaleString() || 0} stars</span>
+                    <span>
+                      {repo.stargazers_count?.toLocaleString() || 0} stars
+                    </span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <span className="text-blue-500">🔄</span>
@@ -218,11 +246,13 @@ const OpenSourceTab = () => {
                   </div>
                   <div className="flex items-center space-x-1">
                     <span className="text-green-500">🐛</span>
-                    <span>{repo.open_issues_count?.toLocaleString() || 0} issues</span>
+                    <span>
+                      {repo.open_issues_count?.toLocaleString() || 0} issues
+                    </span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <span className="text-purple-500">💻</span>
-                    <span>{repo.language || 'Unknown'}</span>
+                    <span>{repo.language || "Unknown"}</span>
                   </div>
                 </div>
               </div>
@@ -267,13 +297,16 @@ const OpenSourceTab = () => {
           <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
             <Github className="w-12 h-12 text-gray-400" />
           </div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-3">No repositories found</h3>
+          <h3 className="text-2xl font-bold text-gray-900 mb-3">
+            No repositories found
+          </h3>
           <p className="text-gray-600 text-lg mb-6 max-w-md mx-auto">
             Try adjusting your filter criteria or language preferences
           </p>
           <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 max-w-md mx-auto">
             <p className="text-blue-700 text-sm">
-              💡 <strong>Tip:</strong> Click the "Discover Trending Repositories" button to find amazing open source projects!
+              💡 <strong>Tip:</strong> Click the "Discover Trending
+              Repositories" button to find amazing open source projects!
             </p>
           </div>
         </div>
@@ -283,8 +316,12 @@ const OpenSourceTab = () => {
       {!loading && repos.length > 0 && (
         <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-8 shadow-lg">
           <div className="text-center mb-6">
-            <h4 className="text-2xl font-bold text-green-800 mb-2">💡 Getting Started Tips</h4>
-            <p className="text-green-600">Ready to contribute? Here's how to get started!</p>
+            <h4 className="text-2xl font-bold text-green-800 mb-2">
+              💡 Getting Started Tips
+            </h4>
+            <p className="text-green-600">
+              Ready to contribute? Here's how to get started!
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm text-green-700">
             <div className="bg-white/60 rounded-xl p-6 border border-green-100">
